@@ -323,6 +323,7 @@ textarea {
 .service-grid,
 .gallery-grid,
 .demo-grid,
+.content-checklist,
 .colour-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -401,10 +402,17 @@ textarea {
 }
 
 .project-card {
+  display: block;
   overflow: hidden;
   border-radius: 8px;
   background: #fff;
   box-shadow: var(--shadow);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 28px 78px rgba(20, 32, 29, 0.18);
 }
 
 .project-card img {
@@ -422,6 +430,44 @@ textarea {
 .project-card span {
   color: var(--muted);
   font-size: 14px;
+}
+
+.project-card em {
+  color: var(--green);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.seo-section {
+  background: #f9faf7;
+}
+
+.content-checklist article {
+  display: grid;
+  gap: 10px;
+  min-height: 170px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.content-checklist strong {
+  font-size: 19px;
+}
+
+.content-checklist span {
+  color: var(--muted);
+}
+
+.project-hero-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
 }
 
 .process-list {
@@ -464,6 +510,7 @@ textarea {
 
 .mini-form {
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
 }
 
 .mini-form.side,
@@ -511,6 +558,7 @@ legend {
 
 label {
   display: grid;
+  align-content: start;
   gap: 8px;
   color: var(--charcoal);
   font-size: 14px;
@@ -726,6 +774,7 @@ textarea:focus {
   .service-grid,
   .service-grid.large,
   .gallery-grid,
+  .content-checklist,
   .colour-grid,
   .mini-form,
   .page-hero.compact,
