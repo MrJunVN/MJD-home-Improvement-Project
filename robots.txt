@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mjdhomeimprovement.com.au/sitemap.xml
+Sitemap: https://mrjunvn.github.io/MJD-home-Improvement-Project/sitemap.xml
