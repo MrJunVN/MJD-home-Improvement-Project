@@ -467,6 +467,31 @@ textarea {
   font-weight: 900;
 }
 
+.project-preview-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.project-preview-strip a {
+  display: grid;
+  gap: 4px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.project-preview-strip strong {
+  color: var(--ink);
+}
+
+.project-preview-strip span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
 .seo-section {
   background: #f9faf7;
 }
@@ -802,6 +827,7 @@ textarea:focus {
   .service-grid,
   .service-grid.large,
   .gallery-grid,
+  .project-preview-strip,
   .content-checklist,
   .colour-grid,
   .mini-form,
