@@ -17,11 +17,7 @@
   <body>
     <header class="site-header">
       <a class="brand" href="index.html" aria-label="MJD Home Improvement home">
-        <span class="brand-mark">MJD</span>
-        <span>
-          <strong>Home Improvement</strong>
-          <small>Greater Melbourne & Geelong</small>
-        </span>
+        <span class="brand-logo"><img src="assets/mjd-logo-transparent.png" alt="MJD Home Improvement"></span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
         <span></span><span></span><span></span>
@@ -67,7 +63,12 @@
         <form class="mini-form" data-demo-form>
           <label>Full name<input name="name" autocomplete="name" required></label>
           <label>Phone<input name="phone" autocomplete="tel" required></label>
-          <label>Suburb or postcode<input name="suburb" placeholder="Type Point Cook or 3030" required><small class="field-hint">Choose a suggestion so the enquiry saves both suburb name and postcode.</small></label>
+          <div class="address-field compact-address">
+            <label for="home-address">Full project address</label>
+            <div class="address-input-row"><input id="home-address" name="address" placeholder="Start typing your street address..." autocomplete="street-address" role="combobox" aria-autocomplete="list" aria-expanded="false" required><button class="gps-button" type="button" data-use-location aria-label="Use my current location">GPS</button></div>
+            <small class="field-hint">Choose a full address suggestion or use GPS.</small>
+            <div class="address-suggestions" role="listbox" hidden></div><p class="address-status" role="status" aria-live="polite"></p>
+          </div>
           <button class="button primary" type="submit">Get Call Back</button>
           <p class="form-note" role="status"></p>
         </form>

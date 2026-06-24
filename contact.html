@@ -9,7 +9,7 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="index.html"><span class="brand-mark">MJD</span><span><strong>Home Improvement</strong><small>Greater Melbourne & Geelong</small></span></a>
+      <a class="brand" href="index.html" aria-label="MJD Home Improvement home"><span class="brand-logo"><img src="assets/mjd-logo-transparent.png" alt="MJD Home Improvement"></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
       <nav id="site-nav" class="site-nav" aria-label="Main navigation">
         <a href="services.html">Services</a><a href="projects.html">Projects</a><a href="about.html">About</a><a href="colours.html">Colours</a><a href="quote.html">Quote</a><a href="contact.html" aria-current="page">Contact</a><a class="nav-phone" href="tel:+61400000000">Call now</a>
@@ -32,7 +32,12 @@
           <label>Full name<input name="name" autocomplete="name" required></label>
           <label>Phone<input name="phone" autocomplete="tel" required></label>
           <label>Email<input type="email" name="email" autocomplete="email"></label>
-          <label>Suburb or postcode<input name="suburb" placeholder="Type Werribee or 3030" required><small class="field-hint">Choose a suggestion so the enquiry saves both suburb name and postcode.</small></label>
+          <div class="address-field">
+            <label for="contact-address">Full project address</label>
+            <div class="address-input-row"><input id="contact-address" name="address" placeholder="Start typing your street address..." autocomplete="street-address" role="combobox" aria-autocomplete="list" aria-expanded="false" required><button class="gps-button" type="button" data-use-location aria-label="Use my current location">Use GPS</button></div>
+            <small class="field-hint">Choose the correct full address suggestion, or use GPS after allowing location access.</small>
+            <div class="address-suggestions" role="listbox" hidden></div><p class="address-status" role="status" aria-live="polite"></p>
+          </div>
           <label>Interested in
             <select name="interest">
               <option>Pergola</option>

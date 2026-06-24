@@ -9,7 +9,7 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="index.html"><span class="brand-mark">MJD</span><span><strong>Home Improvement</strong><small>Greater Melbourne & Geelong</small></span></a>
+      <a class="brand" href="index.html" aria-label="MJD Home Improvement home"><span class="brand-logo"><img src="assets/mjd-logo-transparent.png" alt="MJD Home Improvement"></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
       <nav id="site-nav" class="site-nav" aria-label="Main navigation">
         <a href="services.html">Services</a><a href="projects.html">Projects</a><a href="about.html">About</a><a href="colours.html">Colours</a><a href="quote.html" aria-current="page">Quote</a><a href="contact.html">Contact</a><a class="nav-phone" href="tel:+61400000000">Call now</a>
@@ -21,26 +21,36 @@
         <div>
           <p class="eyebrow">Detailed quote</p>
           <h1>Give MJD enough detail to quote properly.</h1>
-          <p>Customers can choose a service, enter rough dimensions, pick a colour, upload notes later and ask for advice if they do not know the exact size yet.</p>
+          <p>Customers can choose a service, enter rough dimensions, pick a colour, add helpful site and inspiration photos, and ask for advice if they do not know the exact size yet.</p>
         </div>
         <div class="quote-summary">
           <strong>Good quote data</strong>
           <span>Service type</span>
-          <span>Suburb and access notes</span>
+          <span>Full project address</span>
           <span>Length, width and height</span>
           <span>Preferred roof colour</span>
+          <span>Optional project photos</span>
           <span>Call back permission</span>
         </div>
       </section>
 
       <section class="section form-section solo">
-        <form class="quote-form detailed" name="quote" data-demo-form>
-          <fieldset>
+        <form class="quote-form detailed" name="quote" enctype="multipart/form-data" data-demo-form>
+          <fieldset class="contact-details-fieldset">
             <legend>Contact details</legend>
             <label>Full name<input name="name" autocomplete="name" required></label>
             <label>Phone<input name="phone" autocomplete="tel" required></label>
-            <label>Email<input type="email" name="email" autocomplete="email"></label>
-            <label>Suburb or postcode<input name="suburb" placeholder="Type Tarneit or 3029" autocomplete="postal-code" required><small class="field-hint">Start typing the suburb name or postcode, then pick the matching option.</small></label>
+            <label class="email-field">Email<input type="email" name="email" autocomplete="email"></label>
+            <div class="address-field">
+              <label for="quote-address">Full project address</label>
+              <div class="address-input-row">
+                <input id="quote-address" name="address" placeholder="Start typing 100 Dodds Street..." autocomplete="street-address" role="combobox" aria-autocomplete="list" aria-expanded="false" required>
+                <button class="gps-button" type="button" data-use-location aria-label="Use my current location">Use GPS</button>
+              </div>
+              <small class="field-hint">Enter the street address and choose the correct suggestion, or use GPS after allowing location access.</small>
+              <div class="address-suggestions" role="listbox" hidden></div>
+              <p class="address-status" role="status" aria-live="polite"></p>
+            </div>
           </fieldset>
 
           <fieldset>
@@ -97,6 +107,24 @@
               <strong>No colour selected yet</strong>
             </div>
             <a class="button secondary outline" href="colours.html">Browse Colour Page</a>
+          </fieldset>
+
+          <fieldset class="wide-fieldset">
+            <legend>Project photos (optional)</legend>
+            <div class="upload-field">
+              <label for="site-photos">Photos of the area to be built</label>
+              <p>Wide shots and close-ups of access points, walls, roof lines or ground levels help us understand the site before we call.</p>
+              <input id="site-photos" type="file" name="site_photos" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple data-photo-input>
+              <small class="field-hint">Optional · Up to 6 images · JPG, PNG, WEBP or HEIC · 10 MB each</small>
+              <div class="photo-preview" data-photo-preview aria-live="polite"></div>
+            </div>
+            <div class="upload-field">
+              <label for="inspiration-photos">Photos of the project style you want</label>
+              <p>Add screenshots, inspiration photos or a similar completed project. This makes the first conversation much easier.</p>
+              <input id="inspiration-photos" type="file" name="inspiration_photos" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple data-photo-input>
+              <small class="field-hint">Optional · Up to 6 images · JPG, PNG, WEBP or HEIC · 10 MB each</small>
+              <div class="photo-preview" data-photo-preview aria-live="polite"></div>
+            </div>
           </fieldset>
 
           <fieldset class="wide-fieldset">

@@ -163,6 +163,216 @@ if (suburbInputs.length) {
   });
 }
 
+function formatAddress(properties = {}) {
+  const street = [properties.housenumber, properties.street || properties.name].filter(Boolean).join(" ");
+  const locality = properties.district || properties.city || properties.town || properties.village || properties.locality;
+  const state = properties.state;
+  const postcode = properties.postcode;
+  return [street, locality, state, postcode].filter(Boolean).join(", ");
+}
+
+function addressDetails(feature) {
+  const properties = feature.properties || {};
+  const [longitude, latitude] = feature.geometry?.coordinates || [];
+  return {
+    label: formatAddress(properties),
+    suburb: properties.district || properties.city || properties.town || properties.village || properties.locality || "",
+    postcode: properties.postcode || "",
+    state: properties.state || "",
+    latitude: latitude ?? "",
+    longitude: longitude ?? ""
+  };
+}
+
+function saveAddressDetails(form, details) {
+  ensureHiddenInput(form, "suburb_name").value = details.suburb;
+  ensureHiddenInput(form, "postcode").value = details.postcode;
+  ensureHiddenInput(form, "state").value = details.state;
+  ensureHiddenInput(form, "latitude").value = details.latitude;
+  ensureHiddenInput(form, "longitude").value = details.longitude;
+}
+
+document.querySelectorAll(".address-field").forEach((field, fieldIndex) => {
+  const input = field.querySelector('input[name="address"]');
+  const suggestions = field.querySelector(".address-suggestions");
+  const status = field.querySelector(".address-status");
+  const gpsButton = field.querySelector("[data-use-location]");
+  const form = field.closest("form");
+  let results = [];
+  let activeIndex = -1;
+  let debounceTimer;
+  let requestController;
+
+  suggestions.id = `address-suggestions-${fieldIndex + 1}`;
+  input.setAttribute("aria-controls", suggestions.id);
+
+  function closeSuggestions() {
+    suggestions.hidden = true;
+    input.setAttribute("aria-expanded", "false");
+    activeIndex = -1;
+  }
+
+  function chooseAddress(details) {
+    input.value = details.label;
+    saveAddressDetails(form, details);
+    status.textContent = `Address selected: ${details.label}`;
+    closeSuggestions();
+  }
+
+  function renderSuggestions(features) {
+    suggestions.replaceChildren();
+    results = features.map(addressDetails).filter((item) => item.label);
+
+    results.forEach((details, index) => {
+      const option = document.createElement("button");
+      option.type = "button";
+      option.className = "address-option";
+      option.id = `${suggestions.id}-option-${index}`;
+      option.setAttribute("role", "option");
+      option.setAttribute("aria-selected", "false");
+
+      const main = document.createElement("strong");
+      main.textContent = details.label;
+      const source = document.createElement("small");
+      source.textContent = "Address suggestion · OpenStreetMap";
+      option.append(main, source);
+      option.addEventListener("mousedown", (event) => event.preventDefault());
+      option.addEventListener("click", () => chooseAddress(details));
+      suggestions.appendChild(option);
+    });
+
+    suggestions.hidden = results.length === 0;
+    input.setAttribute("aria-expanded", String(results.length > 0));
+    status.textContent = results.length ? `${results.length} address suggestions available.` : "No matching address found. You can keep typing or enter it manually.";
+  }
+
+  async function searchAddress(query) {
+    requestController?.abort();
+    requestController = new AbortController();
+    status.textContent = "Finding matching Australian addresses…";
+
+    try {
+      const url = new URL("https://photon.komoot.io/api/");
+      url.searchParams.set("q", `${query}, Australia`);
+      url.searchParams.set("limit", "6");
+      url.searchParams.set("bbox", "112.9,-43.8,153.7,-10.6");
+      const response = await fetch(url, { signal: requestController.signal });
+      if (!response.ok) throw new Error("Address lookup failed");
+      const data = await response.json();
+      renderSuggestions(data.features || []);
+    } catch (error) {
+      if (error.name === "AbortError") return;
+      closeSuggestions();
+      status.textContent = "Address suggestions are temporarily unavailable. Please enter the full address manually.";
+    }
+  }
+
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+    saveAddressDetails(form, { suburb: "", postcode: "", state: "", latitude: "", longitude: "" });
+    if (input.value.trim().length < 4) {
+      closeSuggestions();
+      status.textContent = input.value ? "Keep typing to see full address suggestions." : "";
+      return;
+    }
+    debounceTimer = setTimeout(() => searchAddress(input.value.trim()), 350);
+  });
+
+  input.addEventListener("keydown", (event) => {
+    const options = [...suggestions.querySelectorAll(".address-option")];
+    if (!options.length || suggestions.hidden) return;
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      activeIndex = event.key === "ArrowDown"
+        ? (activeIndex + 1) % options.length
+        : (activeIndex - 1 + options.length) % options.length;
+      options.forEach((option, index) => option.setAttribute("aria-selected", String(index === activeIndex)));
+      input.setAttribute("aria-activedescendant", options[activeIndex].id);
+    } else if (event.key === "Enter" && activeIndex >= 0) {
+      event.preventDefault();
+      chooseAddress(results[activeIndex]);
+    } else if (event.key === "Escape") {
+      closeSuggestions();
+    }
+  });
+
+  input.addEventListener("blur", () => setTimeout(closeSuggestions, 120));
+
+  gpsButton.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      status.textContent = "GPS location is not supported by this browser. Please enter the address manually.";
+      return;
+    }
+
+    gpsButton.disabled = true;
+    gpsButton.textContent = "Locating…";
+    status.textContent = "Your browser will ask permission before sharing your location.";
+
+    navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+      try {
+        const url = new URL("https://photon.komoot.io/reverse");
+        url.searchParams.set("lat", coords.latitude);
+        url.searchParams.set("lon", coords.longitude);
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Reverse lookup failed");
+        const data = await response.json();
+        const details = addressDetails(data.features?.[0] || {});
+        if (!details.label) throw new Error("No address found");
+        chooseAddress(details);
+      } catch {
+        saveAddressDetails(form, { suburb: "", postcode: "", state: "", latitude: coords.latitude, longitude: coords.longitude });
+        status.textContent = "Location found, but the street address could not be loaded. Please enter it manually.";
+      } finally {
+        gpsButton.disabled = false;
+        gpsButton.textContent = field.classList.contains("compact-address") ? "GPS" : "Use GPS";
+      }
+    }, (error) => {
+      const messages = {
+        1: "Location permission was not granted. You can still enter the address manually.",
+        2: "Your location is unavailable. Please enter the address manually.",
+        3: "Location lookup timed out. Please try again or enter the address manually."
+      };
+      status.textContent = messages[error.code] || "We could not access your location. Please enter the address manually.";
+      gpsButton.disabled = false;
+      gpsButton.textContent = field.classList.contains("compact-address") ? "GPS" : "Use GPS";
+    }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
+  });
+});
+
+document.querySelectorAll("[data-photo-input]").forEach((input) => {
+  const preview = input.closest(".upload-field").querySelector("[data-photo-preview]");
+  let previewUrls = [];
+
+  input.addEventListener("change", () => {
+    previewUrls.forEach(URL.revokeObjectURL);
+    previewUrls = [];
+    preview.replaceChildren();
+    const files = [...input.files];
+    const invalidFile = files.find((file) => !file.type.startsWith("image/") || file.size > 10 * 1024 * 1024);
+    input.setCustomValidity(files.length > 6 ? "Please select no more than 6 images." : invalidFile ? "Each file must be an image no larger than 10 MB." : "");
+
+    files.slice(0, 6).forEach((file) => {
+      const url = URL.createObjectURL(file);
+      previewUrls.push(url);
+      const figure = document.createElement("figure");
+      const image = document.createElement("img");
+      image.src = url;
+      image.alt = "Selected project photo preview";
+      const caption = document.createElement("figcaption");
+      caption.textContent = file.name;
+      figure.append(image, caption);
+      preview.appendChild(figure);
+    });
+  });
+
+  input.form?.addEventListener("reset", () => {
+    previewUrls.forEach(URL.revokeObjectURL);
+    previewUrls = [];
+    preview.replaceChildren();
+    input.setCustomValidity("");
+  });
+});
+
 const colourGrid = document.querySelector("[data-colour-grid]");
 
 if (colourGrid) {
@@ -252,21 +462,12 @@ document.querySelectorAll("[data-demo-form]").forEach((form) => {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const suburbInput = form.querySelector('input[name="suburb"]');
-
-    if (suburbInput) {
-      const suburb = parseSuburb(suburbInput.value);
-      ensureHiddenInput(form, "suburb_name").value = suburb.name;
-      ensureHiddenInput(form, "postcode").value = suburb.postcode;
-      if (suburb.name && suburb.postcode) {
-        suburbInput.value = suburbValue(suburb);
-      }
-    }
 
     if (note) {
+      const address = form.querySelector('input[name="address"]')?.value;
       const suburbName = form.querySelector('input[name="suburb_name"]')?.value;
       const postcode = form.querySelector('input[name="postcode"]')?.value;
-      const locationText = suburbName && postcode ? ` Location saved as ${suburbName}, ${postcode}.` : "";
+      const locationText = address ? ` Project address saved as ${address}${suburbName && postcode ? ` (${suburbName} ${postcode})` : ""}.` : "";
       note.textContent = `Thanks. This demo captured the enquiry locally; connect email, CRM or Google Sheets before launch.${locationText}`;
     }
     form.reset();
