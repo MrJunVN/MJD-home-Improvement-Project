@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Request a Quotation | MJD Home Improvement</title>
     <meta name="description" content="Request a detailed MJD Home Improvement quotation. Choose service, dimensions, colour, timeframe and consultation preferences for carports, verandahs, freestanding pergolas, sheds, fencing and gate automation across Melbourne areas.">
-    <link rel="stylesheet" href="styles.css?v=20260702-4">
+    <link rel="stylesheet" href="styles.css?v=20260702-5">
   </head>
   <body>
     <header class="site-header">
@@ -116,6 +116,9 @@
               <p class="field-hint">Useful for pergolas, verandahs and carports where the frame, roof sheet, gutter and downpipe may be different colours.</p>
               <div class="colour-part-grid" data-colour-part-grid></div>
               <button class="button secondary outline colour-add-button" type="button" data-add-colour-part>Add another part</button>
+              <label>Other colour details
+                <textarea name="other_colour_details" rows="3" placeholder="Example: posts same as frame, flashing to match roof, customer will confirm downpipe colour later..." data-other-colour-details></textarea>
+              </label>
               <label class="consent remaining-colour-toggle"><input type="checkbox" name="same_remaining_colour" data-remaining-colour-toggle> All remaining parts use one colour</label>
               <label data-remaining-colour-field hidden>Remaining parts colour
                 <select name="remaining_parts_colour" data-remaining-colour-select></select>
@@ -156,6 +159,6 @@
     </main>
 
     <footer class="site-footer"><div><strong>MJD Home Improvement</strong><span>Detailed quotation requests for Melbourne areas.</span></div><nav><a href="index.html">Home</a><a href="colours.html">Colours</a><a href="contact.html">Contact</a></nav></footer>
-    <script src="script.js?v=20260702-4"></script>
+    <script src="script.js?v=20260702-5"></script>
   </body>
 </html>

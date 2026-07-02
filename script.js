@@ -395,6 +395,7 @@ const remainingColourToggle = document.querySelector("[data-remaining-colour-tog
 const remainingColourField = document.querySelector("[data-remaining-colour-field]");
 const remainingColourSelect = document.querySelector("[data-remaining-colour-select]");
 const colourDetailsInput = document.querySelector("[data-colour-details]");
+const otherColourDetails = document.querySelector("[data-other-colour-details]");
 
 const colourPartOptions = [
   "Frame",
@@ -409,7 +410,7 @@ const colourPartOptions = [
   "Other"
 ];
 
-const defaultColourParts = ["Frame", "Roof sheet", "Gutter", "Downpipe"];
+const defaultColourParts = ["Frame", "Roof sheet"];
 
 function updateSelectedColour(name) {
   if (!selectedColour) return;
@@ -500,6 +501,7 @@ function updateColourPanels() {
 
     if (remainingColourToggle) remainingColourToggle.checked = false;
     if (remainingColourSelect) remainingColourSelect.value = "";
+    if (otherColourDetails) otherColourDetails.value = "";
     if (remainingColourField) {
       remainingColourField.hidden = true;
       remainingColourField.classList.add("is-hidden");
@@ -532,6 +534,10 @@ function updateColourDetails() {
     rows.push(`All remaining parts: ${remainingColourSelect.value}`);
   }
 
+  if (otherColourDetails?.value.trim()) {
+    rows.push(`Other details: ${otherColourDetails.value.trim()}`);
+  }
+
   colourDetailsInput.value = rows.join("; ");
 }
 
@@ -554,6 +560,7 @@ remainingColourToggle?.addEventListener("change", () => {
 });
 
 remainingColourSelect?.addEventListener("change", updateColourDetails);
+otherColourDetails?.addEventListener("input", updateColourDetails);
 
 const serviceSelect = document.querySelector("#service-select");
 const adviceSelect = document.querySelector("#advice-select");
