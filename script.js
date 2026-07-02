@@ -558,6 +558,7 @@ remainingColourSelect?.addEventListener("change", updateColourDetails);
 const serviceSelect = document.querySelector("#service-select");
 const adviceSelect = document.querySelector("#advice-select");
 const sizeFields = document.querySelectorAll("[data-size-field]");
+const sizeSection = document.querySelector("[data-size-section]");
 
 function updateSizeFields() {
   const showSizeFields = !adviceSelect || adviceSelect.value === "No, I have rough measurements";
@@ -570,6 +571,11 @@ function updateSizeFields() {
       if (input) input.value = "";
     }
   });
+
+  if (sizeSection) {
+    sizeSection.hidden = !showSizeFields;
+    sizeSection.classList.toggle("is-hidden", !showSizeFields);
+  }
 }
 
 if (serviceSelect) {
