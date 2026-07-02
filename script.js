@@ -566,6 +566,31 @@ adviceSelect?.addEventListener("change", updateSizeFields);
 updateSizeFields();
 updateColourPanels();
 
+document.querySelectorAll(".quote-form.detailed > fieldset").forEach((fieldset, index) => {
+  const legend = fieldset.querySelector("legend");
+  if (!legend) return;
+
+  const title = legend.textContent.trim();
+  const button = document.createElement("button");
+  button.className = "fieldset-toggle";
+  button.type = "button";
+  button.textContent = title;
+  button.setAttribute("aria-expanded", index === 0 ? "true" : "false");
+
+  legend.textContent = "";
+  legend.appendChild(button);
+  fieldset.classList.add("is-collapsible");
+
+  if (index !== 0) {
+    fieldset.classList.add("is-collapsed");
+  }
+
+  button.addEventListener("click", () => {
+    const isCollapsed = fieldset.classList.toggle("is-collapsed");
+    button.setAttribute("aria-expanded", String(!isCollapsed));
+  });
+});
+
 const projectFilterButtons = document.querySelectorAll("[data-project-filter]");
 const projectCards = document.querySelectorAll("[data-project-category]");
 

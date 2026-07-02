@@ -829,6 +829,10 @@ textarea:focus {
   border-color: var(--accent);
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .consent {
   grid-template-columns: auto 1fr !important;
   align-items: start;
@@ -878,6 +882,56 @@ textarea:focus {
 
 .remaining-colour-toggle {
   margin-top: 2px;
+}
+
+.colour-fieldset > label,
+.colour-fieldset > .single-colour-panel,
+.colour-fieldset > .multi-colour-panel,
+.colour-fieldset > .button {
+  grid-column: 1 / -1;
+}
+
+.colour-fieldset .single-colour-panel {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.quote-form.detailed fieldset.is-collapsible {
+  position: relative;
+}
+
+.quote-form.detailed fieldset.is-collapsed {
+  gap: 0;
+  padding-bottom: 16px;
+}
+
+.quote-form.detailed fieldset.is-collapsed > :not(legend) {
+  display: none !important;
+}
+
+.fieldset-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  padding: 0 8px;
+  color: var(--ink);
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.fieldset-toggle::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  transition: transform 0.18s ease;
+}
+
+.is-collapsed .fieldset-toggle::after {
+  transform: rotate(-45deg);
 }
 
 .contact-panel {
@@ -1118,7 +1172,8 @@ textarea:focus {
   .process-list,
   .quote-form,
   fieldset,
-  .colour-part-row {
+  .colour-part-row,
+  .colour-fieldset .single-colour-panel {
     grid-template-columns: 1fr;
   }
 
