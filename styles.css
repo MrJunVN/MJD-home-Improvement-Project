@@ -877,10 +877,23 @@ textarea:focus {
 }
 
 .quote-summary span {
+  display: grid;
+  gap: 5px;
   padding: 12px 0;
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-weight: 500;
+}
+
+.quote-summary b {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.quote-summary em {
+  color: var(--muted);
+  font-style: normal;
+  line-height: 1.45;
 }
 
 .colour-card {
