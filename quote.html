@@ -95,14 +95,32 @@
             </label>
           </fieldset>
 
-          <fieldset>
+          <fieldset class="colour-fieldset">
             <legend>Colour preference</legend>
-            <label>Preferred colour
-              <select name="colour" id="colour-select"></select>
+            <label>Colour selection type
+              <select name="colour_selection_type" id="colour-mode-select">
+                <option value="single">One colour for the project</option>
+                <option value="multiple">Multiple colours for different parts</option>
+              </select>
             </label>
-            <div class="selected-colour" data-selected-colour>
-              <span></span>
-              <strong>No colour selected yet</strong>
+            <div class="single-colour-panel" data-single-colour-panel>
+              <label>Preferred colour
+                <select name="colour" id="colour-select"></select>
+              </label>
+              <div class="selected-colour" data-selected-colour>
+                <span></span>
+                <strong>No colour selected yet</strong>
+              </div>
+            </div>
+            <div class="multi-colour-panel" data-multi-colour-panel hidden>
+              <p class="field-hint">Useful for pergolas, verandahs and carports where the frame, roof sheet, gutter and downpipe may be different colours.</p>
+              <div class="colour-part-grid" data-colour-part-grid></div>
+              <button class="button secondary outline colour-add-button" type="button" data-add-colour-part>Add another part</button>
+              <label class="consent remaining-colour-toggle"><input type="checkbox" name="same_remaining_colour" data-remaining-colour-toggle> All remaining parts use one colour</label>
+              <label data-remaining-colour-field hidden>Remaining parts colour
+                <select name="remaining_parts_colour" data-remaining-colour-select></select>
+              </label>
+              <input type="hidden" name="colour_details" data-colour-details>
             </div>
             <a class="button secondary outline" href="colours.html">Browse Colour Page</a>
           </fieldset>

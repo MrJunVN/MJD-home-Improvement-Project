@@ -848,6 +848,38 @@ textarea:focus {
   font-weight: 600;
 }
 
+.single-colour-panel,
+.multi-colour-panel,
+.colour-part-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.colour-part-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8f7f3;
+}
+
+.colour-part-row button,
+.colour-add-button {
+  min-height: 50px;
+}
+
+.colour-part-row button {
+  width: 50px;
+  padding: 0;
+}
+
+.remaining-colour-toggle {
+  margin-top: 2px;
+}
+
 .contact-panel {
   display: grid;
   gap: 10px;
@@ -1085,8 +1117,13 @@ textarea:focus {
   .hero-stats,
   .process-list,
   .quote-form,
-  fieldset {
+  fieldset,
+  .colour-part-row {
     grid-template-columns: 1fr;
+  }
+
+  .colour-part-row button {
+    width: 100%;
   }
 
   .address-input-row {

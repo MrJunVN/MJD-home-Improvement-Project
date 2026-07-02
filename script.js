@@ -386,6 +386,30 @@ if (colourGrid) {
 
 const colourSelect = document.querySelector("#colour-select");
 const selectedColour = document.querySelector("[data-selected-colour]");
+const colourModeSelect = document.querySelector("#colour-mode-select");
+const singleColourPanel = document.querySelector("[data-single-colour-panel]");
+const multiColourPanel = document.querySelector("[data-multi-colour-panel]");
+const colourPartGrid = document.querySelector("[data-colour-part-grid]");
+const addColourPartButton = document.querySelector("[data-add-colour-part]");
+const remainingColourToggle = document.querySelector("[data-remaining-colour-toggle]");
+const remainingColourField = document.querySelector("[data-remaining-colour-field]");
+const remainingColourSelect = document.querySelector("[data-remaining-colour-select]");
+const colourDetailsInput = document.querySelector("[data-colour-details]");
+
+const colourPartOptions = [
+  "Frame",
+  "Roof sheet",
+  "Gutter",
+  "Downpipe",
+  "Flashing",
+  "Posts",
+  "Beam",
+  "Fence panels",
+  "Gate frame",
+  "Other"
+];
+
+const defaultColourParts = ["Frame", "Roof sheet", "Gutter", "Downpipe"];
 
 function updateSelectedColour(name) {
   if (!selectedColour) return;
@@ -416,6 +440,100 @@ if (colourSelect) {
   });
 }
 
+function colourOptionsMarkup(includeAdvice = true) {
+  return `${includeAdvice ? '<option value="">Select colour or need advice</option><option>Need advice</option>' : '<option value="">Select colour</option>'}
+    ${colourOptions.map((colour) => `<option>${colour.name}</option>`).join("")}`;
+}
+
+function colourPartOptionsMarkup(selectedPart = "") {
+  return colourPartOptions
+    .map((part) => `<option${part === selectedPart ? " selected" : ""}>${part}</option>`)
+    .join("");
+}
+
+function createColourPartRow(part = "Other", colour = "") {
+  if (!colourPartGrid) return;
+
+  const row = document.createElement("div");
+  row.className = "colour-part-row";
+  row.innerHTML = `
+    <label>Part
+      <select name="colour_part[]">${colourPartOptionsMarkup(part)}</select>
+    </label>
+    <label>Colour
+      <select name="colour_part_colour[]">${colourOptionsMarkup()}</select>
+    </label>
+    <button class="button secondary outline" type="button" aria-label="Remove colour part">X</button>
+  `;
+
+  const colourSelectForRow = row.querySelector('select[name="colour_part_colour[]"]');
+  colourSelectForRow.value = colour;
+
+  row.querySelector("button").addEventListener("click", () => {
+    row.remove();
+    updateColourDetails();
+  });
+
+  row.querySelectorAll("select").forEach((select) => {
+    select.addEventListener("change", updateColourDetails);
+  });
+
+  colourPartGrid.appendChild(row);
+  updateColourDetails();
+}
+
+function updateColourPanels() {
+  const isMultiple = colourModeSelect?.value === "multiple";
+
+  if (singleColourPanel) singleColourPanel.hidden = isMultiple;
+  if (multiColourPanel) multiColourPanel.hidden = !isMultiple;
+
+  if (isMultiple && colourPartGrid && !colourPartGrid.children.length) {
+    const savedColour = colourSelect?.value || localStorage.getItem("mjdPreferredColour") || "";
+    defaultColourParts.forEach((part, index) => createColourPartRow(part, index === 1 ? savedColour : ""));
+  }
+
+  updateColourDetails();
+}
+
+function updateColourDetails() {
+  if (!colourDetailsInput) return;
+
+  if (colourModeSelect?.value !== "multiple") {
+    colourDetailsInput.value = colourSelect?.value ? `Single colour: ${colourSelect.value}` : "";
+    return;
+  }
+
+  const rows = [...document.querySelectorAll(".colour-part-row")].map((row) => {
+    const part = row.querySelector('select[name="colour_part[]"]')?.value;
+    const colour = row.querySelector('select[name="colour_part_colour[]"]')?.value;
+    return part && colour ? `${part}: ${colour}` : "";
+  }).filter(Boolean);
+
+  if (remainingColourToggle?.checked && remainingColourSelect?.value) {
+    rows.push(`All remaining parts: ${remainingColourSelect.value}`);
+  }
+
+  colourDetailsInput.value = rows.join("; ");
+}
+
+if (remainingColourSelect) {
+  remainingColourSelect.innerHTML = colourOptionsMarkup();
+}
+
+colourModeSelect?.addEventListener("change", updateColourPanels);
+
+addColourPartButton?.addEventListener("click", () => {
+  createColourPartRow();
+});
+
+remainingColourToggle?.addEventListener("change", () => {
+  if (remainingColourField) remainingColourField.hidden = !remainingColourToggle.checked;
+  updateColourDetails();
+});
+
+remainingColourSelect?.addEventListener("change", updateColourDetails);
+
 const serviceSelect = document.querySelector("#service-select");
 
 if (serviceSelect) {
@@ -429,6 +547,8 @@ if (serviceSelect) {
     if (adviceSelect) adviceSelect.value = "Yes, please advise size and layout";
   }
 }
+
+updateColourPanels();
 
 const projectFilterButtons = document.querySelectorAll("[data-project-filter]");
 const projectCards = document.querySelectorAll("[data-project-category]");
