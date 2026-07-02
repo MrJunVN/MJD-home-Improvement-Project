@@ -763,13 +763,14 @@ legend {
   font-weight: 650;
 }
 
-.wide-fieldset,
-.quote-form.detailed fieldset {
+.quote-form.detailed > fieldset {
   grid-column: span 1;
 }
 
-.quote-form.detailed .wide-fieldset {
-  grid-column: 1 / -1;
+.quote-form.detailed > .wide-fieldset,
+.quote-form.detailed > .colour-fieldset {
+  grid-column: 1 / -1 !important;
+  width: 100%;
 }
 
 label {
@@ -861,7 +862,7 @@ textarea:focus {
 
 .colour-part-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 96px;
   gap: 10px;
   align-items: end;
   padding: 12px;
@@ -876,8 +877,8 @@ textarea:focus {
 }
 
 .colour-part-row button {
-  width: 50px;
-  padding: 0;
+  width: 100%;
+  padding: 0 12px;
 }
 
 .remaining-colour-toggle {

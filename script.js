@@ -463,7 +463,7 @@ function createColourPartRow(part = "Other", colour = "") {
     <label>Colour
       <select name="colour_part_colour[]">${colourOptionsMarkup()}</select>
     </label>
-    <button class="button secondary outline" type="button" aria-label="Remove colour part">X</button>
+    <button class="button secondary outline" type="button" aria-label="Cancel colour part">Cancel</button>
   `;
 
   const colourSelectForRow = row.querySelector('select[name="colour_part_colour[]"]');
