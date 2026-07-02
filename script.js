@@ -95,17 +95,7 @@ const suburbOptions = [
   { name: "Berwick", postcode: "3806" },
   { name: "Cranbourne", postcode: "3977" },
   { name: "Frankston", postcode: "3199" },
-  { name: "Mornington", postcode: "3931" },
-  { name: "Geelong", postcode: "3220" },
-  { name: "North Geelong", postcode: "3215" },
-  { name: "Corio", postcode: "3214" },
-  { name: "Lara", postcode: "3212" },
-  { name: "Leopold", postcode: "3224" },
-  { name: "Torquay", postcode: "3228" },
-  { name: "Bacchus Marsh", postcode: "3340" },
-  { name: "Macedon", postcode: "3440" },
-  { name: "Gisborne", postcode: "3437" },
-  { name: "Ballarat", postcode: "3350" }
+  { name: "Mornington", postcode: "3931" }
 ];
 
 function suburbValue(suburb) {
