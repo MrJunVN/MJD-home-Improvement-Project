@@ -463,7 +463,7 @@ function createColourPartRow(part = "Other", colour = "") {
     <label>Colour
       <select name="colour_part_colour[]">${colourOptionsMarkup()}</select>
     </label>
-    <button class="button secondary outline" type="button" aria-label="Cancel colour part">Cancel</button>
+    <button class="button secondary outline colour-remove-button" type="button" aria-label="Remove colour part" title="Remove">&times;</button>
   `;
 
   const colourSelectForRow = row.querySelector('select[name="colour_part_colour[]"]');
@@ -485,8 +485,26 @@ function createColourPartRow(part = "Other", colour = "") {
 function updateColourPanels() {
   const isMultiple = colourModeSelect?.value === "multiple";
 
-  if (singleColourPanel) singleColourPanel.hidden = isMultiple;
-  if (multiColourPanel) multiColourPanel.hidden = !isMultiple;
+  if (singleColourPanel) {
+    singleColourPanel.hidden = isMultiple;
+    singleColourPanel.classList.toggle("is-hidden", isMultiple);
+  }
+
+  if (multiColourPanel) {
+    multiColourPanel.hidden = !isMultiple;
+    multiColourPanel.classList.toggle("is-hidden", !isMultiple);
+  }
+
+  if (!isMultiple) {
+    colourPartGrid?.replaceChildren();
+
+    if (remainingColourToggle) remainingColourToggle.checked = false;
+    if (remainingColourSelect) remainingColourSelect.value = "";
+    if (remainingColourField) {
+      remainingColourField.hidden = true;
+      remainingColourField.classList.add("is-hidden");
+    }
+  }
 
   if (isMultiple && colourPartGrid && !colourPartGrid.children.length) {
     const savedColour = colourSelect?.value || localStorage.getItem("mjdPreferredColour") || "";
@@ -528,7 +546,10 @@ addColourPartButton?.addEventListener("click", () => {
 });
 
 remainingColourToggle?.addEventListener("change", () => {
-  if (remainingColourField) remainingColourField.hidden = !remainingColourToggle.checked;
+  if (remainingColourField) {
+    remainingColourField.hidden = !remainingColourToggle.checked;
+    remainingColourField.classList.toggle("is-hidden", !remainingColourToggle.checked);
+  }
   updateColourDetails();
 });
 
