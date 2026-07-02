@@ -535,6 +535,21 @@ remainingColourToggle?.addEventListener("change", () => {
 remainingColourSelect?.addEventListener("change", updateColourDetails);
 
 const serviceSelect = document.querySelector("#service-select");
+const adviceSelect = document.querySelector("#advice-select");
+const sizeFields = document.querySelectorAll("[data-size-field]");
+
+function updateSizeFields() {
+  const showSizeFields = !adviceSelect || adviceSelect.value === "No, I have rough measurements";
+
+  sizeFields.forEach((field) => {
+    field.hidden = !showSizeFields;
+
+    if (!showSizeFields) {
+      const input = field.querySelector("input");
+      if (input) input.value = "";
+    }
+  });
+}
 
 if (serviceSelect) {
   const params = new URLSearchParams(window.location.search);
@@ -543,11 +558,12 @@ if (serviceSelect) {
 
   if (service) serviceSelect.value = service;
   if (needsAdvice) {
-    const adviceSelect = document.querySelector("#advice-select");
     if (adviceSelect) adviceSelect.value = "Yes, please advise size and layout";
   }
 }
 
+adviceSelect?.addEventListener("change", updateSizeFields);
+updateSizeFields();
 updateColourPanels();
 
 const projectFilterButtons = document.querySelectorAll("[data-project-filter]");
