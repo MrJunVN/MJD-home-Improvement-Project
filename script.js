@@ -1,17 +1,28 @@
 const navToggle = document.querySelector(".nav-toggle");
 const siteNav = document.querySelector(".site-nav");
+const navBackdrop = document.createElement("div");
+
+navBackdrop.className = "nav-backdrop";
+navBackdrop.setAttribute("aria-hidden", "true");
+document.body.appendChild(navBackdrop);
+
+function closeMobileNav() {
+  siteNav?.classList.remove("open");
+  navBackdrop.classList.remove("open");
+  navToggle?.setAttribute("aria-expanded", "false");
+}
 
 navToggle?.addEventListener("click", () => {
   const isOpen = siteNav.classList.toggle("open");
+  navBackdrop.classList.toggle("open", isOpen);
   navToggle.setAttribute("aria-expanded", String(isOpen));
 });
 
 siteNav?.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
-    siteNav.classList.remove("open");
-    navToggle?.setAttribute("aria-expanded", "false");
-  });
+  link.addEventListener("click", closeMobileNav);
 });
+
+navBackdrop.addEventListener("click", closeMobileNav);
 
 const colourOptions = [
   { name: "Dover White", hex: "#f4f1e8" },
@@ -182,6 +193,63 @@ function saveAddressDetails(form, details) {
   ensureHiddenInput(form, "longitude").value = details.longitude;
 }
 
+function parseManualAddress(value) {
+  const postcodeMatch = value.match(/\b(3\d{3})\b/);
+  const postcode = postcodeMatch?.[1] || "";
+  let suburb = "";
+  const normalisedValue = value.toLowerCase();
+  const knownSuburb = suburbOptions
+    .filter((item) => normalisedValue.includes(item.name.toLowerCase()))
+    .sort((a, b) => b.name.length - a.name.length)[0];
+
+  if (knownSuburb) {
+    return {
+      suburb: knownSuburb.name,
+      postcode: postcode || knownSuburb.postcode,
+      state: "VIC",
+      latitude: "",
+      longitude: ""
+    };
+  }
+
+  if (postcode) {
+    const beforePostcode = value.slice(0, postcodeMatch.index).replace(/\b(VIC|Victoria)\b/gi, "").trim();
+    const parts = beforePostcode.split(",").map((part) => part.trim()).filter(Boolean);
+    const suburbCandidate = parts.at(-1) || beforePostcode;
+    const words = suburbCandidate.match(/[A-Za-z][A-Za-z'-]*/g) || [];
+    suburb = words.slice(-3).join(" ");
+  }
+
+  return { suburb, postcode, state: postcode ? "VIC" : "", latitude: "", longitude: "" };
+}
+
+function hydrateManualAddressFields(form) {
+  const input = form.querySelector('input[name="address"]');
+  if (!input?.value.trim()) return;
+
+  const suburbInput = ensureHiddenInput(form, "suburb_name");
+  const postcodeInput = ensureHiddenInput(form, "postcode");
+
+  if (suburbInput.value && postcodeInput.value) return;
+
+  const details = parseManualAddress(input.value);
+  if (details.suburb || details.postcode) {
+    saveAddressDetails(form, {
+      suburb: suburbInput.value || details.suburb,
+      postcode: postcodeInput.value || details.postcode,
+      state: ensureHiddenInput(form, "state").value || details.state,
+      latitude: ensureHiddenInput(form, "latitude").value,
+      longitude: ensureHiddenInput(form, "longitude").value
+    });
+  }
+}
+
+document.querySelectorAll("form").forEach((form) => {
+  if (form.querySelector('input[name="address"]')) {
+    form.addEventListener("submit", () => hydrateManualAddressFields(form), { capture: true });
+  }
+});
+
 document.querySelectorAll(".address-field").forEach((field, fieldIndex) => {
   const input = field.querySelector('input[name="address"]');
   const suggestions = field.querySelector(".address-suggestions");
@@ -330,7 +398,9 @@ document.querySelectorAll(".address-field").forEach((field, fieldIndex) => {
 });
 
 document.querySelectorAll("[data-photo-input]").forEach((input) => {
-  const preview = input.closest(".upload-field").querySelector("[data-photo-preview]");
+  const uploadField = input.closest(".upload-field");
+  const preview = uploadField.querySelector("[data-photo-preview]");
+  const error = uploadField.querySelector("[data-upload-error]");
   let previewUrls = [];
 
   input.addEventListener("change", () => {
@@ -338,10 +408,24 @@ document.querySelectorAll("[data-photo-input]").forEach((input) => {
     previewUrls = [];
     preview.replaceChildren();
     const files = [...input.files];
-    const invalidFile = files.find((file) => !file.type.startsWith("image/") || file.size > 10 * 1024 * 1024);
-    input.setCustomValidity(files.length > 6 ? "Please select no more than 6 images." : invalidFile ? "Each file must be an image no larger than 10 MB." : "");
+    const tooManyFiles = files.length > 6;
+    const invalidType = files.find((file) => !file.type.startsWith("image/"));
+    const oversizedFile = files.find((file) => file.type.startsWith("image/") && file.size > 10 * 1024 * 1024);
+    const validFiles = files.filter((file) => file.type.startsWith("image/") && file.size <= 10 * 1024 * 1024).slice(0, 6);
+    let message = "";
 
-    files.slice(0, 6).forEach((file) => {
+    if (tooManyFiles) {
+      message = "Error: Please select no more than 6 images.";
+    } else if (invalidType) {
+      message = `Error: File ${invalidType.name} is not an image.`;
+    } else if (oversizedFile) {
+      message = `Error: Image ${oversizedFile.name} is too large (max 10MB).`;
+    }
+
+    input.setCustomValidity(message);
+    if (error) error.textContent = message;
+
+    validFiles.forEach((file) => {
       const url = URL.createObjectURL(file);
       previewUrls.push(url);
       const figure = document.createElement("figure");
@@ -360,6 +444,7 @@ document.querySelectorAll("[data-photo-input]").forEach((input) => {
     previewUrls = [];
     preview.replaceChildren();
     input.setCustomValidity("");
+    if (error) error.textContent = "";
   });
 });
 
@@ -650,11 +735,39 @@ projectFilterButtons.forEach((button) => {
   });
 });
 
+document.querySelectorAll(".project-gallery-container").forEach((gallery) => {
+  const galleryMain = gallery.querySelector(".gallery-main-image img");
+  const thumbnailButtons = gallery.querySelectorAll(".thumbnail-button");
+
+  thumbnailButtons.forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+
+    button.addEventListener("click", () => {
+      thumbnailButtons.forEach((item) => {
+        item.classList.remove("active");
+        item.setAttribute("aria-pressed", "false");
+      });
+      button.classList.add("active");
+      button.setAttribute("aria-pressed", "true");
+
+      if (galleryMain) {
+        galleryMain.style.opacity = "0";
+        setTimeout(() => {
+          galleryMain.src = button.dataset.image;
+          galleryMain.alt = button.querySelector("img")?.alt || button.getAttribute("aria-label") || "";
+          galleryMain.style.opacity = "1";
+        }, 150);
+      }
+    });
+  });
+});
+
 document.querySelectorAll("[data-demo-form]").forEach((form) => {
   const note = form.querySelector(".form-note");
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    hydrateManualAddressFields(form);
 
     if (note) {
       const address = form.querySelector('input[name="address"]')?.value;

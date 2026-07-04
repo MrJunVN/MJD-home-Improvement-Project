@@ -166,6 +166,18 @@ button:focus-visible,
   background: var(--ink);
 }
 
+.nav-backdrop {
+  position: fixed;
+  inset: 92px 0 0;
+  z-index: 19;
+  display: none;
+  background: rgba(20, 22, 25, 0.46);
+}
+
+.nav-backdrop.open {
+  display: block;
+}
+
 .hero {
   position: relative;
   min-height: calc(100vh - 92px);
@@ -207,7 +219,7 @@ button:focus-visible,
 
 .eyebrow {
   margin: 0 0 12px;
-  color: var(--accent);
+  color: var(--accent-strong);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -393,6 +405,14 @@ button:focus-visible,
   background: #fff;
 }
 
+.upload-error {
+  min-height: 18px;
+  margin: 0;
+  color: var(--accent-strong) !important;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .photo-preview {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -534,6 +554,7 @@ button:focus-visible,
   border-radius: 8px;
   background: var(--surface);
   box-shadow: 0 10px 30px rgba(36, 39, 42, 0.06);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .service-card span,
@@ -730,6 +751,60 @@ button:focus-visible,
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   box-shadow: var(--shadow);
+}
+
+.project-gallery-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.gallery-main-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.gallery-main-image img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.gallery-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.thumbnail-button {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+.thumbnail-button img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail-button.active,
+.thumbnail-button[aria-pressed="true"] {
+  border-color: var(--accent);
+}
+
+.thumbnail-button:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
 }
 
 .process-list {
@@ -1283,6 +1358,7 @@ textarea:focus {
   }
 
   .brand-logo img {
+    position: relative;
     top: -32px;
     width: 132px;
   }
