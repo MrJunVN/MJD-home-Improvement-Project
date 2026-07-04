@@ -180,7 +180,7 @@ button:focus-visible,
 
 .hero {
   position: relative;
-  min-height: calc(100vh - 92px);
+  min-height: clamp(520px, 74vh, 680px);
   display: grid;
   align-items: end;
   padding: clamp(40px, 6vw, 86px) clamp(18px, 4vw, 56px);
@@ -1364,7 +1364,7 @@ textarea:focus {
   }
 
   .hero {
-    min-height: 760px;
+    min-height: clamp(460px, 86vh, 600px);
     align-items: center;
   }
 
