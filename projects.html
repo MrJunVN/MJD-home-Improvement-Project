@@ -5,9 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Projects Gallery | Carports, Pergolas, Sheds & Gates Melbourne</title>
     <meta name="description" content="Browse MJD Home Improvement project examples for carports, verandahs, freestanding pergolas, sheds, fencing and gate automation across Melbourne areas.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/favicon.ico" sizes="any">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
       <a class="brand" href="index.html" aria-label="MJD Home Improvement home"><span class="brand-logo"><img src="assets/mjd-logo-transparent.png" alt="MJD Home Improvement"></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
@@ -16,12 +23,12 @@
       </nav>
     </header>
 
-    <main>
+    <main id="main-content">
       <section class="page-hero">
         <div>
           <p class="eyebrow">Projects gallery</p>
           <h1>Completed work and project examples in one searchable gallery.</h1>
-          <p>For a business with many jobs to showcase, this page becomes the proof library. Home can feature a few highlights, while the full gallery keeps every project easy to browse by service type.</p>
+          <p>Browse project examples by service type, from carports and sheds to pergolas and gate automation.</p>
         </div>
       </section>
 
@@ -29,47 +36,47 @@
         <div class="section-heading">
           <p class="eyebrow">Browse by service</p>
           <h2>Filter projects without hiding them in a carousel.</h2>
-          <p>A grid is easier for homeowners to scan and better for SEO because each card can link to a detailed project page.</p>
+          <p>Use the filters to narrow the gallery, then open a project example for more detail.</p>
         </div>
 
         <div class="project-toolbar" aria-label="Project filters">
-          <button class="filter-button active" type="button" data-project-filter="all">All</button>
-          <button class="filter-button" type="button" data-project-filter="pergola">Pergolas</button>
-          <button class="filter-button" type="button" data-project-filter="shed">Sheds</button>
-          <button class="filter-button" type="button" data-project-filter="gate">Gates</button>
-          <button class="filter-button" type="button" data-project-filter="fencing">Fencing</button>
-          <button class="filter-button" type="button" data-project-filter="carport">Carports</button>
+          <button class="filter-button active" type="button" data-project-filter="all" aria-pressed="true">All</button>
+          <button class="filter-button" type="button" data-project-filter="pergola" aria-pressed="false">Pergolas</button>
+          <button class="filter-button" type="button" data-project-filter="shed" aria-pressed="false">Sheds</button>
+          <button class="filter-button" type="button" data-project-filter="gate" aria-pressed="false">Gates</button>
+          <button class="filter-button" type="button" data-project-filter="fencing" aria-pressed="false">Fencing</button>
+          <button class="filter-button" type="button" data-project-filter="carport" aria-pressed="false">Carports</button>
         </div>
 
         <div class="gallery-grid project-gallery">
           <a class="project-card" href="project-pergola.html" data-project-category="pergola">
-            <img src="assets/mjd-hero.png" alt="Pergola project preview">
-            <div><strong>Pergola project</strong><span>Melbourne suburbs</span><em>View project</em></div>
+            <img src="assets/project-pergola-gowanbrae.jpg" alt="Pergola project preview in Gowanbrae" loading="lazy">
+            <div><strong>Pergola project</strong><span>Gowanbrae</span><em>View project</em></div>
           </a>
-          <a class="project-card" href="shed-geelongrd.html" data-project-category="shed">
-            <img src="assets/shed-bannockburn-exterior.jpg" alt="Shed project preview in Bannockburn">
-            <div><strong>Shed project</strong><span>Geelong Rd, Bannockburn</span><em>View project</em></div>
+          <a class="project-card" href="project-shed-manerim.html" data-project-category="shed">
+            <img src="assets/project-shed-manerim.jpg" alt="Shed project preview in Manerim" loading="lazy">
+            <div><strong>Shed project</strong><span>Manerim</span><em>View project</em></div>
           </a>
           <a class="project-card" href="project-gate.html" data-project-category="gate">
-            <img src="assets/mjd-hero.png" alt="Aluminium gate project preview">
-            <div><strong>Automated gate</strong><span>Melbourne suburbs</span><em>View project</em></div>
+            <img src="assets/project-gate-werribee.jpg" alt="Side gate project preview in Werribee" loading="lazy">
+            <div><strong>Side gate</strong><span>Werribee</span><em>View project</em></div>
           </a>
           <a class="project-card" href="project-pergola.html" data-project-category="pergola">
-            <img src="assets/mjd-hero.png" alt="Verandah project preview">
-            <div><strong>Covered verandah</strong><span>North western suburbs</span><em>View example</em></div>
+            <img src="assets/project-patio-burnside.jpg" alt="Covered patio project preview in Burnside" loading="lazy">
+            <div><strong>Covered patio</strong><span>Burnside</span><em>View example</em></div>
           </a>
           <a class="project-card" href="project-patio.html" data-project-category="carport">
-            <img src="assets/mjd-hero.png" alt="Carport project preview">
-            <div><strong>Carport cover</strong><span>Melbourne area</span><em>View example</em></div>
+            <img src="assets/project-carport-lara.jpg" alt="Carport project preview in Lara" loading="lazy">
+            <div><strong>Carport cover</strong><span>Lara</span><em>View example</em></div>
           </a>
-          <a class="project-card" href="project-gate.html" data-project-category="fencing">
-            <img src="assets/mjd-hero.png" alt="Fencing project preview">
-            <div><strong>Fencing</strong><span>Melbourne suburbs</span><em>View example</em></div>
+          <a class="project-card" href="project-fence.html" data-project-category="fencing">
+            <img src="assets/project-fence-doncaster.jpg" alt="Horizontal slat fence project preview in Doncaster" loading="lazy">
+            <div><strong>Horizontal slat fence</strong><span>Doncaster</span><em>View example</em></div>
           </a>
         </div>
       </section>
 
-      <section class="lead-band">
+      <section class="lead-band cta-only">
         <div>
           <p class="eyebrow">Have similar work?</p>
           <h2>Send your suburb, photos and rough measurements.</h2>
@@ -80,6 +87,12 @@
     </main>
 
     <footer class="site-footer"><div><strong>MJD Home Improvement</strong><span>Project examples across Melbourne areas.</span></div><nav><a href="index.html">Home</a><a href="services.html">Services</a><a href="quote.html">Quote</a></nav></footer>
+    <div class="sticky-cta" role="region" aria-label="Quick contact">
+      <a class="button ghost" href="tel:+61490088866">Call now</a>
+      <a class="button primary" href="quote.html">Request a Quotation</a>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
+
+

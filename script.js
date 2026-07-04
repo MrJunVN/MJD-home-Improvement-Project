@@ -629,11 +629,19 @@ const projectFilterButtons = document.querySelectorAll("[data-project-filter]");
 const projectCards = document.querySelectorAll("[data-project-category]");
 
 projectFilterButtons.forEach((button) => {
+  button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+});
+
+projectFilterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const filter = button.dataset.projectFilter;
 
-    projectFilterButtons.forEach((item) => item.classList.remove("active"));
+    projectFilterButtons.forEach((item) => {
+      item.classList.remove("active");
+      item.setAttribute("aria-pressed", "false");
+    });
     button.classList.add("active");
+    button.setAttribute("aria-pressed", "true");
 
     projectCards.forEach((card) => {
       const shouldShow = filter === "all" || card.dataset.projectCategory === filter;
