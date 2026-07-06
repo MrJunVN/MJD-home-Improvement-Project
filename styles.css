@@ -925,7 +925,7 @@ button:focus-visible,
 
 .gallery-thumbnails {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
   gap: 8px;
 }
 
@@ -1483,6 +1483,10 @@ textarea:focus {
     flex-direction: column;
   }
 
+  .project-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .lead-band.cta-only {
     grid-template-columns: 1fr;
   }
@@ -1541,6 +1545,7 @@ textarea:focus {
 
   .hero-stats,
   .project-hero-stats,
+  .project-gallery,
   .process-list,
   .quote-form,
   fieldset,
