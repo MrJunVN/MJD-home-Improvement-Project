@@ -8,9 +8,14 @@
   --paper: #f7f7f6;
   --paper-alt: #fbfbfa;
   --surface: #ffffff;
+  --surface-tint: #f6f5f1;
   --charcoal: #303337;
+  --charcoal-dark: #1b1d20;
+  --charcoal-deep: #222529;
   --accent: #bd343b;
   --accent-strong: #94232a;
+  --accent-light: #f2a4a9;
+  --accent-deep: #2c1518;
   --green: #4b4f53;
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -151,8 +156,8 @@ button:focus-visible,
 
 .nav-toggle {
   display: none;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--surface);
@@ -224,6 +229,11 @@ button:focus-visible,
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.hero .eyebrow,
+.page-hero .eyebrow {
+  color: var(--accent-light);
 }
 
 .hero h1,
@@ -326,7 +336,7 @@ button:focus-visible,
   border: 1px solid var(--accent);
   border-radius: 6px;
   color: var(--accent-strong);
-  background: #fffaf4;
+  background: var(--surface-tint);
   font-weight: 700;
   cursor: pointer;
 }
@@ -369,7 +379,7 @@ button:focus-visible,
 
 .address-option:last-child { border-bottom: 0; }
 .address-option:hover,
-.address-option[aria-selected="true"] { background: #f4f7f2; }
+.address-option[aria-selected="true"] { background: var(--surface-tint); }
 .address-option strong,
 .address-option small { display: block; }
 .address-option small,
@@ -387,9 +397,9 @@ button:focus-visible,
   align-content: start;
   gap: 9px;
   padding: 18px;
-  border: 1px dashed #b8bdb5;
+  border: 1px dashed var(--line);
   border-radius: 8px;
-  background: #fafbf8;
+  background: var(--surface-tint);
 }
 
 .upload-field p {
@@ -473,15 +483,36 @@ button:focus-visible,
 }
 
 .page-hero {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: clamp(26px, 5vw, 60px);
   min-height: 420px;
   padding: clamp(58px, 8vw, 104px) clamp(18px, 4vw, 56px);
   color: #fff;
-  background:
-    linear-gradient(90deg, rgba(20, 22, 25, 0.92), rgba(20, 22, 25, 0.74)),
-    url("assets/project-hero-gowanbrae-pergola.jpg") center / cover;
+  background: linear-gradient(155deg, var(--charcoal-dark) 0%, var(--charcoal) 52%, var(--accent-deep) 130%);
+  overflow: hidden;
+}
+
+.page-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  right: -12%;
+  top: -18%;
+  width: 55%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(189, 52, 59, 0.16), transparent 70%);
+  pointer-events: none;
 }
 
 .page-hero.compact {
@@ -1030,7 +1061,7 @@ textarea:focus {
   padding: 16px 54px 16px 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #f8f7f3;
+  background: var(--surface-tint);
 }
 
 .colour-part-row label,
@@ -1233,7 +1264,7 @@ textarea:focus {
   gap: 20px;
   padding: 28px clamp(18px, 4vw, 56px);
   color: rgba(255, 255, 255, 0.74);
-  background: #222529;
+  background: var(--charcoal-deep);
 }
 
 .site-footer strong,
@@ -1421,5 +1452,18 @@ textarea:focus {
 
   .sticky-cta.call-only {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
