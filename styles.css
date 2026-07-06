@@ -653,7 +653,7 @@ button:focus-visible,
   color: #fff;
   background:
     linear-gradient(90deg, rgba(20, 22, 25, 0.88), rgba(20, 22, 25, 0.58)),
-    url("assets/project-hero-gowanbrae-pergola.png") center / cover;
+    url("assets/project-hero-gowanbrae-pergola.jpg") center / cover;
 }
 
 .projects-hero-copy {
