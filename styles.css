@@ -2442,3 +2442,73 @@ textarea:disabled {
     font-size: 14px;
   }
 }
+
+.page-hero.subpage-hero {
+  isolation: isolate;
+  background:
+    linear-gradient(90deg, rgba(15, 23, 42, 0.94) 0%, rgba(15, 23, 42, 0.78) 48%, rgba(15, 23, 42, 0.5) 100%),
+    var(--subpage-hero-image) var(--subpage-hero-position, center) / cover no-repeat;
+}
+
+.page-hero.subpage-hero::after {
+  display: none;
+}
+
+.subpage-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.subpage-hero > div:first-child {
+  align-self: center;
+}
+
+.services-hero {
+  --subpage-hero-image: url("assets/project-pergola-gowanbrae.jpg");
+  --subpage-hero-position: center 58%;
+}
+
+.about-hero {
+  --subpage-hero-image: url("assets/mjd-hero.png");
+  --subpage-hero-position: center 54%;
+}
+
+.colours-hero {
+  --subpage-hero-image: url("assets/project-pergola-gowanbrae-2.jpg");
+  --subpage-hero-position: center 42%;
+}
+
+.quote-hero {
+  --subpage-hero-image: url("assets/project-carport-lara.jpg");
+  --subpage-hero-position: center 48%;
+}
+
+.contact-hero {
+  --subpage-hero-image: url("assets/project-gate-werribee.jpg");
+  --subpage-hero-position: center 46%;
+}
+
+@media (max-width: 640px) {
+  .page-hero.subpage-hero {
+    background:
+      linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.72)),
+      var(--subpage-hero-image) var(--subpage-hero-mobile-position, var(--subpage-hero-position, center)) / cover no-repeat;
+  }
+
+  .services-hero,
+  .colours-hero {
+    --subpage-hero-mobile-position: 60% center;
+  }
+
+  .about-hero {
+    --subpage-hero-mobile-position: 62% center;
+  }
+
+  .quote-hero {
+    --subpage-hero-mobile-position: 52% center;
+  }
+
+  .contact-hero {
+    --subpage-hero-mobile-position: 45% center;
+  }
+}
