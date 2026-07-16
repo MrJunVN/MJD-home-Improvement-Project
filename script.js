@@ -780,3 +780,45 @@ document.querySelectorAll("[data-demo-form]").forEach((form) => {
     updateSelectedColour("");
   });
 });
+
+const chatDock = document.createElement("aside");
+chatDock.className = "chat-dock";
+chatDock.setAttribute("aria-label", "Chat with MJD Home Improvement");
+chatDock.innerHTML = `
+  <a class="chat-bubble chat-messenger" href="https://m.me/100083554997971" target="_blank" rel="noopener noreferrer" aria-label="Chat with MJD Home Improvement on Messenger">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.477 2 2 6.145 2 11.259c0 2.911 1.45 5.507 3.715 7.204V22l3.395-1.864c.906.25 1.876.383 2.89.383 5.523 0 10-4.145 10-9.26C22 6.145 17.523 2 12 2Zm.994 12.468-2.546-2.717-4.97 2.717 5.467-5.805 2.607 2.717 4.91-2.717-5.468 5.805Z"/></svg>
+    <span class="chat-label">Messenger</span>
+  </a>
+  <button class="chat-bubble chat-whatsapp is-pending" type="button" aria-label="WhatsApp chat number coming soon" aria-describedby="whatsapp-chat-status">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.04 2a9.84 9.84 0 0 0-8.43 14.91L2.05 22l5.22-1.52A9.88 9.88 0 1 0 12.04 2Zm0 17.95a8.08 8.08 0 0 1-4.12-1.13l-.3-.18-3.1.9.92-3.02-.2-.31a8.13 8.13 0 1 1 6.8 3.74Zm4.46-6.08c-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.03-.38-1.96-1.21-.72-.65-1.21-1.45-1.35-1.69-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.31-.74-1.79-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.58.18 1.1.16 1.51.1.46-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z"/></svg>
+    <span class="chat-label" id="whatsapp-chat-status" role="status" aria-live="polite">WhatsApp · number coming soon</span>
+  </button>
+`;
+document.body.appendChild(chatDock);
+
+const whatsappChatButton = chatDock.querySelector(".chat-whatsapp");
+const whatsappChatStatus = chatDock.querySelector("#whatsapp-chat-status");
+
+whatsappChatButton?.addEventListener("click", () => {
+  whatsappChatStatus.textContent = "WhatsApp number will be added soon";
+  chatDock.classList.add("show-whatsapp-status");
+  window.setTimeout(() => chatDock.classList.remove("show-whatsapp-status"), 2800);
+});
+
+const siteFooter = document.querySelector(".site-footer");
+let chatDockFrame;
+
+function updateChatDockPosition() {
+  chatDockFrame = undefined;
+  const footerTop = siteFooter?.getBoundingClientRect().top ?? window.innerHeight;
+  const footerOverlap = Math.max(0, window.innerHeight - footerTop);
+  chatDock.style.setProperty("--chat-footer-lift", `${footerOverlap}px`);
+}
+
+function requestChatDockPosition() {
+  if (!chatDockFrame) chatDockFrame = window.requestAnimationFrame(updateChatDockPosition);
+}
+
+window.addEventListener("scroll", requestChatDockPosition, { passive: true });
+window.addEventListener("resize", requestChatDockPosition);
+updateChatDockPosition();
